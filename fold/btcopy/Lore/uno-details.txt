@@ -4,8 +4,10 @@ uplineId:0
 sponsorId:0
 rank:-
 contatto:mail e o numero
-city:-
-nDiretti:-1
-nDown:-1
+city:c
+nDiretti:2
+nDown:14
+puntiPosseduti:4400
+puntiGenerati:0
 extra:
 imageUrl:

@@ -55,16 +55,24 @@ namespace bynary_tree_app
 
 		public BinaryTree(string filePath, string treePath)
 		{
-			FilePath = filePath;
-			TreePath = treePath;
-			LoadFile();
-			CheckList();
+			try
+			{
+				FilePath = filePath;
+				TreePath = treePath;
+				LoadFile();
+				CheckList();
+			}
+			catch(Exception ex)
+			{
+				throw ex;
+			}
 		}
 
 		public void LoadFile()
 		{
 			if(!CheckHeaderFile()) throw new ArgumentException("Il file csv inserito ha head scorretto");
 			string[] lines = File.ReadAllLines(_csvPath);
+			tree.Clear();
 			for(int i = 1; i < lines.Length; ++i)
 			{
 				string[] split = lines[i].Split(',');
@@ -85,7 +93,10 @@ namespace bynary_tree_app
 					city = split[6],
 					nDiretti = int.Parse(split[7]),
 					nDown = int.Parse(split[8]),
-					imageUrl = split[9]
+					puntiPosseduti = int.Parse(split[9]),
+					puntiGenerati = int.Parse(split[10]),
+					extra = split[11],
+					imageUrl = split[12]
 				});
 			}
 		}
@@ -98,10 +109,11 @@ namespace bynary_tree_app
 				string line = "";
 				while((b = fs.ReadByte()) > 0)
 					if((char)b == '\n')
-						return line.Trim().ToUpper() == "Personal ID,Name,Upline ID,Sponsor ID,Rank,Contatto,City,N diretti,N down,Extra,Image URL\r".Trim().ToUpper();
+						return line.Trim().ToUpper() == Persona.Head.Trim().ToUpper();
 					else line += (char)b;
 			}
-			throw new Exception("codice non raggiungibile raggiunto");
+			//throw new Exception("codice non raggiungibile raggiunto");
+			return false;
 		}
 
 		public void CheckList()
@@ -135,7 +147,7 @@ namespace bynary_tree_app
 				string root = _treePath + "\\" + CreaPath(item);
 				//Console.WriteLine(root);
 				Directory.CreateDirectory(root);
-				Byte[] info = new UTF8Encoding(true).GetBytes(item.ToString());
+				Byte[] info = new UTF8Encoding(true).GetBytes(item.ToString() + "\r\n");
 				using(FileStream fsw = new FileStream(Directory.GetParent(root).FullName + "\\" + item.name + "-details.txt", FileMode.CreateNew, FileAccess.Write, FileShare.None))
 					fsw.Write(info, 0, info.Length);
 			}
@@ -159,5 +171,170 @@ namespace bynary_tree_app
 			throw new Exception($"id:{id} non trovato");
 		}
 
+		public void CreaTreeFile()
+		{
+			var dir = new DirectoryInfo(_treePath);
+			if(!dir.Exists)
+				throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+
+			string[] GetFilesRecursive(string folderPath)
+			{
+				try
+				{
+					return Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
+				}
+				catch(Exception ex)
+				{
+					throw new Exception($"Errore durante la scansione delle cartelle: {ex.Message}");
+				}
+			}
+			using(FileStream fs = new FileStream(_csvPath, FileMode.Create, FileAccess.Write, FileShare.None))
+			{
+				string str = Persona.Head + "\r\n";
+				Byte[] info = new UTF8Encoding(true).GetBytes(str);
+				fs.Write(info, 0, info.Length);
+
+				string[] allFiles = GetFilesRecursive(_treePath);
+				List<string> allLines = new List<string>();
+				foreach(string file in allFiles)
+				{
+					allLines.Add(File.ReadAllText(file));
+					string[] strs = File.ReadAllText(file).Split('\n');
+					for(int i = 0; i < strs.Length; i++)
+					{
+						str = strs[i];
+						if(str.Length != 0)
+							str = str.Remove(str.Length - 1);
+						// Rimuovi il testo prima dei due punti ":"
+						int ind = str.IndexOf(':');
+						if(ind != -1) strs[i] = str.Substring(ind + 1);
+					}
+					str = string.Join(",", strs);
+					info = new UTF8Encoding(true).GetBytes(str + "\r\n");
+					fs.Write(info, 0, info.Length);
+				}
+			}
+			LoadFile();
+			CheckList();
+		}
+
+		/// <summary>
+		/// basati sul file csv già listato, che va ad aggiornare solo il csv stesso
+		/// </summary>
+		public void Calcoli()
+		{
+			for(int i = 0; i < tree.Count; ++i)
+			{
+				tree[i].nDiretti = -1;
+				tree[i].nDown = -1;
+				tree[i].puntiPosseduti = -1;
+			}
+
+			//ndown
+			for(int i = 0; i < tree.Count; ++i)
+			{
+				if(tree[i].nDown == -1)
+					tree[i].nDown = CalcolaNdown(tree[i].id);
+				if(tree[i].puntiPosseduti == -1)
+					tree[i].puntiPosseduti = CalcolaPPosseduti(tree[i].id);
+				if(tree[i].nDiretti == -1)
+					tree[i].nDiretti = CalcolaNdiretti(tree[i].id);
+			}
+
+			// Funzione ricorsiva per calcolare il numero di discendenti di una persona
+			int CalcolaNdown(int id)
+			{
+				int count = 0;
+				foreach(var p in tree)
+					if(p.uplineId == id)
+						count += 1 + CalcolaNdown(p.id);
+				return count;
+			}
+
+			// Funzione ricorsiva per calcolare i punti generati di una persona
+			float CalcolaPPosseduti(int id)
+			{
+				float point = 0;
+				foreach(var p in tree)
+					if(p.uplineId == id)
+						point += p.puntiGenerati + CalcolaPPosseduti(p.id);
+				return point;
+			}
+
+			int CalcolaNdiretti(int id)
+			{
+				int count = 0;
+				foreach(var p in tree)
+					if(p.sponsorId == id)
+						++count;
+				return count;
+			}
+
+			StampaNuovoCsv();
+
+		}
+
+		public void StampaNuovoCsv()
+		{
+			using(FileStream fs = new FileStream(_csvPath, FileMode.Create, FileAccess.Write, FileShare.None))
+			{
+				string str = Persona.Head + "\r\n";
+				Byte[] info = new UTF8Encoding(true).GetBytes(str);
+				fs.Write(info, 0, info.Length);
+				foreach(var p in tree)
+				{
+					str = p.ToString(",", false);
+					info = new UTF8Encoding(true).GetBytes(str + "\r\n");
+					fs.Write(info, 0, info.Length);
+				}
+			}
+		}
+
+		public void SortFile()
+		{
+			List<Persona> QuickSort(List<Persona> arr, int lxInd, int rxInd)
+			{
+				var i = lxInd;
+				var j = rxInd;
+				var pivot = arr[lxInd].id;
+
+				while(i <= j)
+				{
+					while(arr[i].id < pivot)
+						i++;
+
+					while(arr[j].id > pivot)
+						j--;
+
+					if(i <= j)
+
+						(arr[j], arr[i])=(arr[i++], arr[j--]);
+				}
+
+				if(lxInd < j)
+					QuickSort(arr, lxInd, j);
+
+				if(i < rxInd)
+					QuickSort(arr, i, rxInd);
+
+				return arr;
+			}
+
+			tree = QuickSort(new List<Persona>(tree), 0, tree.Count - 1);
+
+			StampaNuovoCsv();
+		}
+
+		/// <summary>
+		/// va ad aggiornare solo il csv.
+		/// </summary>
+		public void ResetPunti()
+		{
+			foreach(var p in tree)
+			{
+				p.puntiPosseduti = p.puntiGenerati = 0;
+			}
+			StampaNuovoCsv();
+		}
 	}
 }

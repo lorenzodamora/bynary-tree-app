@@ -5,7 +5,9 @@ sponsorId:-1
 rank:-
 contatto:mail e o numero
 city:bergamo
-nDiretti:-1
-nDown:-1
+nDiretti:0
+nDown:0
+puntiPosseduti:0
+puntiGenerati:0
 extra:
-imageUrl:
+imageUrl:https://drive.google.com/file/d/1mzIYSKSLCGYL6Cn5AfjE6lgXAqjSsJLr/view?usp=sharing

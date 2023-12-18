@@ -1,0 +1,13 @@
+id:8
+name:otto
+uplineId:3
+sponsorId:3
+rank:-
+contatto:mail e o numero
+city:c
+nDiretti:2
+nDown:2
+puntiPosseduti:1100
+puntiGenerati:0
+extra:
+imageUrl:

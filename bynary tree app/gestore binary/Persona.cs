@@ -11,9 +11,12 @@
 		public string city;
 		public int nDiretti;
 		public int nDown;
+		public float puntiPosseduti;
+		public float puntiGenerati;
 		public string extra;
 		public string imageUrl;
 
+		static public string Head => "Personal ID,Name,Upline ID,Sponsor ID,Rank,Contatto,City,N diretti,N down,Punti Posseduti,Punti Generati,Extra,Image URL";
 		public Persona() { }
 
 		public Persona(
@@ -26,6 +29,8 @@
 			string city,
 			int nDiretti,
 			int nDown,
+			float pPosseduti,
+			float pGenerati,
 			string extra,
 			string imageUrl)
 		{
@@ -38,17 +43,19 @@
 			this.city = city;
 			this.nDiretti = nDiretti;
 			this.nDown = nDown;
+			this.puntiPosseduti = pPosseduti;
+			this.puntiGenerati = pGenerati;
 			this.extra = extra;
 			this.imageUrl = imageUrl;
 		}
 
-		public override string ToString()
+		public override string ToString() => ToString("\r\n", true);
+
+		public string ToString(string sep, bool descrizione)
 		{
-			return this.ToString("\n");
-		}
-		public string ToString(string sep)
-		{
-			return $"id:{id}{sep}name:{name}{sep}uplineId:{uplineId}{sep}sponsorId:{sponsorId}{sep}rank:{rank}{sep}contatto:{contatto}{sep}city:{city}{sep}nDiretti:{nDiretti}{sep}nDown:{nDown}{sep}extra:{extra}{sep}imageUrl:{imageUrl}";
+			if(descrizione)
+			return $"id:{id}{sep}name:{name}{sep}uplineId:{uplineId}{sep}sponsorId:{sponsorId}{sep}rank:{rank}{sep}contatto:{contatto}{sep}city:{city}{sep}nDiretti:{nDiretti}{sep}nDown:{nDown}{sep}puntiPosseduti:{puntiPosseduti}{sep}puntiGenerati:{puntiGenerati}{sep}extra:{extra}{sep}imageUrl:{imageUrl}";
+			return $"{id}{sep}{name}{sep}{uplineId}{sep}{sponsorId}{sep}{rank}{sep}{contatto}{sep}{city}{sep}{nDiretti}{sep}{nDown}{sep}{puntiPosseduti}{sep}{puntiGenerati}{sep}{extra}{sep}{imageUrl}";
 		}
 	}
 	/*

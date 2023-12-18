@@ -1,0 +1,13 @@
+id:3
+name:tre
+uplineId:1
+sponsorId:1
+rank:-
+contatto:mail e o numero
+city:c
+nDiretti:2
+nDown:6
+puntiPosseduti:2200
+puntiGenerati:0
+extra:
+imageUrl:

@@ -1,0 +1,13 @@
+id:15
+name:quindici
+uplineId:7
+sponsorId:7
+rank:-
+contatto:mail e o numero
+city:c
+nDiretti:0
+nDown:0
+puntiPosseduti:0
+puntiGenerati:550
+extra:
+imageUrl:

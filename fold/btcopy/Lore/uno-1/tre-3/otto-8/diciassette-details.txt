@@ -1,0 +1,13 @@
+id:17
+name:diciassette
+uplineId:8
+sponsorId:8
+rank:-
+contatto:mail e o numero
+city:c
+nDiretti:0
+nDown:0
+puntiPosseduti:0
+puntiGenerati:550
+extra:
+imageUrl:

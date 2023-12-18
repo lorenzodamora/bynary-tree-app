@@ -1,0 +1,13 @@
+id:5
+name:cinque
+uplineId:2
+sponsorId:2
+rank:-
+contatto:mail e o numero
+city:c
+nDiretti:2
+nDown:6
+puntiPosseduti:2200
+puntiGenerati:0
+extra:
+imageUrl:

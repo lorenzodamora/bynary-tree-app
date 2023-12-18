@@ -1,0 +1,13 @@
+id:14
+name:quattordici
+uplineId:6
+sponsorId:6
+rank:-
+contatto:mail e o numero
+city:c
+nDiretti:2
+nDown:2
+puntiPosseduti:1100
+puntiGenerati:0
+extra:
+imageUrl:

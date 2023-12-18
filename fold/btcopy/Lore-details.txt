@@ -1,0 +1,13 @@
+id:0
+name:Lore
+uplineId:-1
+sponsorId:-1
+rank:-
+contatto:mail e o numero
+city:bergamo
+nDiretti:2
+nDown:30
+puntiPosseduti:8800
+puntiGenerati:0
+extra:
+imageUrl:

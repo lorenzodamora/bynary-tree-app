@@ -1,0 +1,13 @@
+id:9
+name:nove
+uplineId:4
+sponsorId:4
+rank:-
+contatto:mail e o numero
+city:c
+nDiretti:2
+nDown:2
+puntiPosseduti:1100
+puntiGenerati:0
+extra:
+imageUrl:
