@@ -1,26 +1,26 @@
-﻿using System;
-
-namespace bynary_tree_app
+﻿namespace bynary_tree_app
 {
-	internal struct Persona
+	internal class Persona
 	{
 		public int id;
 		public string name;
 		public int uplineId;
 		public int sponsorId;
-		public Rank rank;
+		public string rank;
 		public string contatto;
 		public string city;
 		public int nDiretti;
 		public int nDown;
 		public string imageUrl;
 
+		public Persona() { }
+
 		public Persona(
 			int id,
 			string name,
 			int uplineId,
 			int sponsorId,
-			Rank rank,
+			string rank,
 			string contatto,
 			string city,
 			int nDiretti,
@@ -39,7 +39,7 @@ namespace bynary_tree_app
 			this.imageUrl = imageUrl;
 		}
 	}
-
+	/*
 	internal enum Rank
 	{
 		None = 0,
@@ -50,4 +50,5 @@ namespace bynary_tree_app
 		Hemerald = 5,
 		Diamond = 6
 	}
+	*/
 }

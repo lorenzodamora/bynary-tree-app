@@ -6,19 +6,39 @@ namespace bynary_tree_app
 {
 	public partial class App : Form
 	{
-
 		private string mainCsvPath;
-		private string mainPagesPath;
+		private string mainTreePath;
 		private BinaryTree main;
+
+		private void App_Load(object sender, EventArgs e)
+		{
+			if(Starter.restart) ResetPaths_Click(null, null);
+		}
+
+		private void ResetPaths_Click(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.Paths = "";
+			Starter.restart = true;
+			Close();
+		}
 
 		public App()
 		{
 			InitializeComponent();
+			btn_resetPaths.Visible = false;
 			if(!GetPaths()) SetPaths();
 			else
 			{
-				main = new BinaryTree(mainCsvPath, mainPagesPath);
-				SetVisible();
+				try
+				{
+					main = new BinaryTree(mainCsvPath, mainTreePath);
+					SetVisible();
+				}
+				catch(Exception ex)
+				{
+					MessageBox.Show(ex.Message, "Errore");
+					Starter.restart = true;
+				}
 			}
 		}
 
@@ -27,7 +47,7 @@ namespace bynary_tree_app
 			string[] p = Properties.Settings.Default.Paths.Split('\n');
 			if(p.Length != 2) return false;
 			mainCsvPath = p[0];
-			mainPagesPath = p[1];
+			mainTreePath = p[1];
 			return true;
 		}
 
@@ -96,8 +116,9 @@ namespace bynary_tree_app
 		private void EndSetPaths(string add)
 		{
 			Properties.Settings.Default.Paths += "\n" + add;
+			Properties.Settings.Default.Save();
 			GetPaths();
-			main = new BinaryTree(mainCsvPath, mainPagesPath);
+			main = new BinaryTree(mainCsvPath, mainTreePath);
 			btn_setPath.Visible = txt_setPath.Visible = false;
 			SetVisible();
 		}
@@ -105,7 +126,52 @@ namespace bynary_tree_app
 		private void SetVisible()
 		{
 			//.Visible = true
+			btn_resetPaths.Visible = true;
 			MessageBox.Show(Properties.Settings.Default.Paths);
+		}
+
+		private void F1_Click(object sender, EventArgs e)
+		{
+			if(Directory.Exists(mainTreePath + "copy")) Directory.Delete(mainTreePath + "copy", true);
+			CopyDirectory(mainTreePath, mainTreePath + "copy", true);
+
+			void CopyDirectory(string sourceDir, string destinationDir, bool recursive)
+			{
+				// Get information about the source directory
+				var dir = new DirectoryInfo(sourceDir);
+
+				// Check if the source directory exists
+				if(!dir.Exists)
+					throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+
+				// Cache directories before we start copying
+				DirectoryInfo[] dirs = dir.GetDirectories();
+
+				// Create the destination directory
+				Directory.CreateDirectory(destinationDir);
+
+				// Get the files in the source directory and copy to the destination directory
+				foreach(FileInfo file in dir.GetFiles())
+				{
+					string targetFilePath = Path.Combine(destinationDir, file.Name);
+					file.CopyTo(targetFilePath);
+				}
+
+				// If recursive and copying subdirectories, recursively call this method
+				if(recursive)
+				{
+					foreach(DirectoryInfo subDir in dirs)
+					{
+						string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+						CopyDirectory(subDir.FullName, newDestinationDir, true);
+					}
+				}
+			}
+
+			Directory.Delete(mainTreePath, true);
+			Directory.CreateDirectory(mainTreePath);
+
+			main.CreaTreeFolder();
 		}
 
 	}

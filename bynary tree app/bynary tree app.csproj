@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A147F774-249D-4AA9-A10E-DD62484A3C71}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>bynary_tree_app</RootNamespace>
     <AssemblyName>bynary tree app</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
