@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -132,8 +133,13 @@ namespace bynary_tree_app
 
 		private void F1_Click(object sender, EventArgs e)
 		{
+			if(MessageBox.Show("Sicuro?", "Conferma azione",MessageBoxButtons.YesNo) == DialogResult.No) return;
+			bool copy = MessageBox.Show("Creare una copia del vecchio?", "Conferma azione",MessageBoxButtons.YesNo) == DialogResult.Yes;
+			if(copy)
+			{
 			if(Directory.Exists(mainTreePath + "copy")) Directory.Delete(mainTreePath + "copy", true);
 			CopyDirectory(mainTreePath, mainTreePath + "copy", true);
+			}
 
 			void CopyDirectory(string sourceDir, string destinationDir, bool recursive)
 			{
@@ -172,6 +178,9 @@ namespace bynary_tree_app
 			Directory.CreateDirectory(mainTreePath);
 
 			main.CreaTreeFolder();
+			string msg = copy ? "Creata copia del sovrascritto" : "Sovrascrito";
+			if(MessageBox.Show(msg + ".\nAprire la posizione?", "Conferma azione", MessageBoxButtons.YesNo) == DialogResult.Yes)
+				Process.Start("explorer.exe", Directory.GetParent(mainTreePath).FullName);
 		}
 
 	}

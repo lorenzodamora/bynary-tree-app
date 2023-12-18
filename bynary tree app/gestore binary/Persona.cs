@@ -11,6 +11,7 @@
 		public string city;
 		public int nDiretti;
 		public int nDown;
+		public string extra;
 		public string imageUrl;
 
 		public Persona() { }
@@ -25,6 +26,7 @@
 			string city,
 			int nDiretti,
 			int nDown,
+			string extra,
 			string imageUrl)
 		{
 			this.id = id;
@@ -36,7 +38,17 @@
 			this.city = city;
 			this.nDiretti = nDiretti;
 			this.nDown = nDown;
+			this.extra = extra;
 			this.imageUrl = imageUrl;
+		}
+
+		public override string ToString()
+		{
+			return this.ToString("\n");
+		}
+		public string ToString(string sep)
+		{
+			return $"id:{id}{sep}name:{name}{sep}uplineId:{uplineId}{sep}sponsorId:{sponsorId}{sep}rank:{rank}{sep}contatto:{contatto}{sep}city:{city}{sep}nDiretti:{nDiretti}{sep}nDown:{nDown}{sep}extra:{extra}{sep}imageUrl:{imageUrl}";
 		}
 	}
 	/*

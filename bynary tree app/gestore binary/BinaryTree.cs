@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace bynary_tree_app
 {
@@ -97,7 +98,7 @@ namespace bynary_tree_app
 				string line = "";
 				while((b = fs.ReadByte()) > 0)
 					if((char)b == '\n')
-						return line.Trim().ToUpper() == "Personal ID,Name,Upline ID,Sponsor ID,Rank,Contatto,City,N diretti,N down,Image URL\r".Trim().ToUpper();
+						return line.Trim().ToUpper() == "Personal ID,Name,Upline ID,Sponsor ID,Rank,Contatto,City,N diretti,N down,Extra,Image URL\r".Trim().ToUpper();
 					else line += (char)b;
 			}
 			throw new Exception("codice non raggiungibile raggiunto");
@@ -134,6 +135,9 @@ namespace bynary_tree_app
 				string root = _treePath + "\\" + CreaPath(item);
 				//Console.WriteLine(root);
 				Directory.CreateDirectory(root);
+				Byte[] info = new UTF8Encoding(true).GetBytes(item.ToString());
+				using(FileStream fsw = new FileStream(Directory.GetParent(root).FullName + "\\" + item.name + "-details.txt", FileMode.CreateNew, FileAccess.Write, FileShare.None))
+					fsw.Write(info, 0, info.Length);
 			}
 		}
 

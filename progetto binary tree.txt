@@ -1,0 +1,16 @@
+creare cartelle binary tree partendo dal csv (per lucid chart (org chart data))
+
+creare csv partendo dalle cartelle
+	modificando il file nella cartella della persona posso andare a modificare il csv
+
+mettere in ordine il csv
+
+calcolo dei punti e reset dei punti cv bv
+
+cerca persona tramite contenuto o nome file/cartella e scrivere percorso cartelle
+
+Personal ID,Name,Upline ID,Sponsor ID,Rank,Contatto,City,N diretti,N down,Image URL
+0,Lore,-1,-1,-,mail e o numero,bergamo,-1,-1,
+1,uno,0,0,-,mail e o numero,-,-1,-1,
+2,due,0,0,-,mail e o numero,-,-1,-1,
+3,tre,1,0,-,mail e o numero,-,-1,-1,

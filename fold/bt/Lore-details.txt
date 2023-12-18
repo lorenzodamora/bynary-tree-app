@@ -1,0 +1,11 @@
+id:0
+name:Lore
+uplineId:-1
+sponsorId:-1
+rank:-
+contatto:mail e o numero
+city:bergamo
+nDiretti:-1
+nDown:-1
+extra:
+imageUrl:
